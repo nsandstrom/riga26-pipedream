@@ -2,6 +2,7 @@
 
 import { Layers, Play, Loader2 } from "lucide-react";
 import { usePipeline } from "@/lib/state/PipelineProvider";
+import { PipeDreamGame } from "@/components/game/PipeDreamGame";
 
 export function TopBar() {
   const { runPipeline, isRunning } = usePipeline();
@@ -21,6 +22,7 @@ export function TopBar() {
           <span className="cursor-default hover:text-zinc-200">Docs</span>
           <span className="cursor-default hover:text-zinc-200">Examples</span>
         </nav>
+        <PipeDreamGame />
         <button
           type="button"
           className="rounded-md border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 hover:bg-zinc-900"
