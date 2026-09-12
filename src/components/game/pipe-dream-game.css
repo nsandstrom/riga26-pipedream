@@ -1,0 +1,407 @@
+/* ---- Windows 3.11 -ish chrome ---- */
+/* Scoped under .pd-game-overlay so it never leaks into the host app's styles. */
+.pd-game-overlay {
+  --face: #c0c0c0;
+  --face-light: #dfdfdf;
+  --face-dark: #808080;
+  --face-darker: #000000;
+  --titlebar: #000080;
+  --titlebar2: #1084d0;
+  --led-bg: #000000;
+  --led-fg: #00ff00;
+  font-family: Tahoma, 'MS Sans Serif', Geneva, sans-serif;
+  font-size: 12px;
+  color: #000;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #008080; /* classic teal desktop */
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow: auto;
+}
+
+.pd-game-overlay * { box-sizing: border-box; }
+
+/* Reusable 3D bevels, matching the classic Windows widget look */
+.pd-game-overlay .raised {
+  background: var(--face);
+  border-top: 1px solid var(--face-light);
+  border-left: 1px solid var(--face-light);
+  border-bottom: 1px solid var(--face-darker);
+  border-right: 1px solid var(--face-darker);
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 var(--face-dark);
+}
+.pd-game-overlay .raised:active {
+  border-top: 1px solid var(--face-darker);
+  border-left: 1px solid var(--face-darker);
+  border-bottom: 1px solid var(--face-light);
+  border-right: 1px solid var(--face-light);
+  box-shadow: inset 1px 1px 0 var(--face-dark), inset -1px -1px 0 #fff;
+}
+.pd-game-overlay .sunken {
+  background: var(--face);
+  border-top: 1px solid var(--face-darker);
+  border-left: 1px solid var(--face-darker);
+  border-bottom: 1px solid var(--face-light);
+  border-right: 1px solid var(--face-light);
+  box-shadow: inset 1px 1px 0 var(--face-dark), inset -1px -1px 0 #fff;
+}
+
+.pd-game-overlay #app {
+  width: 100%;
+  max-width: 1000px;
+  background: var(--face);
+  padding: 3px;
+  border-top: 2px solid var(--face-light);
+  border-left: 2px solid var(--face-light);
+  border-bottom: 2px solid var(--face-darker);
+  border-right: 2px solid var(--face-darker);
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 var(--face-dark);
+}
+
+/* ---- Title bar ---- */
+.pd-game-overlay #titlebar {
+  background: linear-gradient(90deg, var(--titlebar), var(--titlebar2));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px;
+  font-weight: bold;
+  font-size: 13px;
+}
+.pd-game-overlay #titlebar .title-icon { font-size: 14px; }
+.pd-game-overlay #titlebar .title-text { flex: 1; letter-spacing: 0.5px; }
+.pd-game-overlay .title-buttons { display: flex; gap: 2px; }
+.pd-game-overlay .tbtn {
+  width: 18px;
+  height: 16px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  color: #000;
+  padding: 0;
+}
+
+/* ---- Menu bar ---- */
+.pd-game-overlay #menubar {
+  background: var(--face);
+  display: flex;
+  gap: 2px;
+  padding: 2px 4px;
+  border-bottom: 1px solid var(--face-dark);
+  font-size: 12px;
+}
+.pd-game-overlay #menubar span {
+  padding: 2px 8px;
+  cursor: default;
+}
+.pd-game-overlay #menubar span:hover {
+  background: var(--titlebar);
+  color: #fff;
+}
+
+/* ---- Status / stats row ---- */
+.pd-game-overlay #topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--face);
+  padding: 8px;
+  margin: 6px 0;
+}
+.pd-game-overlay .stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pd-game-overlay .stat label {
+  font-size: 11px;
+  font-weight: bold;
+}
+.pd-game-overlay .led {
+  background: var(--led-bg);
+  color: var(--led-fg);
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 2px;
+  padding: 2px 6px;
+  min-width: 46px;
+  text-align: right;
+  border-top: 1px solid var(--face-darker);
+  border-left: 1px solid var(--face-darker);
+  border-bottom: 1px solid var(--face-light);
+  border-right: 1px solid var(--face-light);
+  box-shadow: inset 1px 1px 0 var(--face-dark), inset -1px -1px 0 #fff;
+}
+
+.pd-game-overlay #helpBtn, .pd-game-overlay #muteBtn {
+  margin-left: auto;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 10px;
+  cursor: pointer;
+  color: #000;
+}
+.pd-game-overlay #helpBtn { margin-left: auto; }
+.pd-game-overlay #muteBtn { margin-left: 4px; }
+
+/* buttons everywhere use the raised bevel */
+.pd-game-overlay button {
+  font-family: inherit;
+}
+.pd-game-overlay button.tbtn,
+.pd-game-overlay #helpBtn, .pd-game-overlay #muteBtn,
+.pd-game-overlay #overlayBtn, .pd-game-overlay #helpCloseBtn {
+  background: var(--face);
+  border-top: 1px solid var(--face-light);
+  border-left: 1px solid var(--face-light);
+  border-bottom: 1px solid var(--face-darker);
+  border-right: 1px solid var(--face-darker);
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 var(--face-dark);
+}
+.pd-game-overlay button.tbtn:active,
+.pd-game-overlay #helpBtn:active, .pd-game-overlay #muteBtn:active,
+.pd-game-overlay #overlayBtn:active, .pd-game-overlay #helpCloseBtn:active {
+  border-top: 1px solid var(--face-darker);
+  border-left: 1px solid var(--face-darker);
+  border-bottom: 1px solid var(--face-light);
+  border-right: 1px solid var(--face-light);
+  box-shadow: inset 1px 1px 0 var(--face-dark), inset -1px -1px 0 #fff;
+}
+
+.pd-game-overlay #playfield {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 0 6px;
+}
+
+.pd-game-overlay #boardWrap {
+  position: relative;
+  background: var(--face);
+  padding: 4px;
+  line-height: 0;
+  border-top: 1px solid var(--face-darker);
+  border-left: 1px solid var(--face-darker);
+  border-bottom: 1px solid var(--face-light);
+  border-right: 1px solid var(--face-light);
+  box-shadow: inset 1px 1px 0 var(--face-dark), inset -1px -1px 0 #fff;
+}
+
+.pd-game-overlay canvas#board {
+  display: block;
+  cursor: crosshair;
+  image-rendering: pixelated;
+}
+
+.pd-game-overlay #phaseBanner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #ff0000;
+  text-shadow: 2px 2px 0 #000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.pd-game-overlay #phaseBanner.show { opacity: 1; }
+
+.pd-game-overlay #sidebar {
+  width: 230px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pd-game-overlay fieldset.panel {
+  margin: 0;
+  border-style: groove;
+  border-width: 2px;
+  border-color: var(--face);
+  background: var(--face);
+  padding: 8px;
+}
+.pd-game-overlay fieldset.panel legend {
+  font-size: 11px;
+  font-weight: bold;
+  padding: 0 4px;
+}
+
+.pd-game-overlay .bar {
+  background: var(--led-bg);
+  border-top: 1px solid var(--face-darker);
+  border-left: 1px solid var(--face-darker);
+  border-bottom: 1px solid var(--face-light);
+  border-right: 1px solid var(--face-light);
+  box-shadow: inset 1px 1px 0 var(--face-dark), inset -1px -1px 0 #fff;
+  height: 16px;
+  padding: 2px;
+}
+.pd-game-overlay .bar-fill {
+  height: 100%;
+  width: 100%;
+  background: repeating-linear-gradient(90deg, #ff8c00 0 5px, #7a4400 5px 7px);
+}
+.pd-game-overlay .bar-fill.green {
+  background: repeating-linear-gradient(90deg, #00cc00 0 5px, #004d00 5px 7px);
+}
+
+.pd-game-overlay #lenLabel {
+  text-align: right;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.pd-game-overlay #queue {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pd-game-overlay .qitem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-top: 1px solid var(--face-darker);
+  border-left: 1px solid var(--face-darker);
+  border-bottom: 1px solid var(--face-light);
+  border-right: 1px solid var(--face-light);
+  box-shadow: inset 1px 1px 0 var(--face-dark), inset -1px -1px 0 #fff;
+  padding: 3px 6px;
+}
+.pd-game-overlay .qitem.current {
+  background: #ffffcc;
+}
+.pd-game-overlay .qitem canvas { display: block; image-rendering: pixelated; }
+.pd-game-overlay .qitem .qlabel {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.pd-game-overlay .hint {
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.pd-game-overlay #statusbar {
+  margin-top: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  border-top: 1px solid var(--face-darker);
+  border-left: 1px solid var(--face-darker);
+  border-bottom: 1px solid var(--face-light);
+  border-right: 1px solid var(--face-light);
+  box-shadow: inset 1px 1px 0 var(--face-dark), inset -1px -1px 0 #fff;
+}
+
+/* ---- Dialogs (message boxes) ---- */
+.pd-game-overlay #overlay, .pd-game-overlay #helpOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.pd-game-overlay .hidden { display: none !important; }
+
+.pd-game-overlay .dialog {
+  background: var(--face);
+  padding: 2px;
+  min-width: 360px;
+  max-width: 440px;
+  border-top: 2px solid var(--face-light);
+  border-left: 2px solid var(--face-light);
+  border-bottom: 2px solid var(--face-darker);
+  border-right: 2px solid var(--face-darker);
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 var(--face-dark);
+}
+.pd-game-overlay .dialog-titlebar {
+  background: linear-gradient(90deg, var(--titlebar), var(--titlebar2));
+  color: #fff;
+  font-weight: bold;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 4px;
+  margin-bottom: 10px;
+}
+.pd-game-overlay .dialog-body {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 4px 16px;
+}
+.pd-game-overlay .dialog-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+.pd-game-overlay .dialog-body p { margin: 0; line-height: 1.5; font-size: 12px; }
+.pd-game-overlay .dialog-buttons {
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px 16px;
+}
+.pd-game-overlay .dialog-buttons button {
+  min-width: 84px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.pd-game-overlay .rules {
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.6;
+  padding-left: 18px;
+  margin: 0;
+}
+
+.pd-game-overlay .pd-game-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: var(--face);
+  color: #000;
+  border-top: 1px solid var(--face-light);
+  border-left: 1px solid var(--face-light);
+  border-bottom: 1px solid var(--face-darker);
+  border-right: 1px solid var(--face-darker);
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 var(--face-dark);
+  cursor: pointer;
+}
+.pd-game-overlay .pd-game-close:active {
+  border-top: 1px solid var(--face-darker);
+  border-left: 1px solid var(--face-darker);
+  border-bottom: 1px solid var(--face-light);
+  border-right: 1px solid var(--face-light);
+  box-shadow: inset 1px 1px 0 var(--face-dark), inset -1px -1px 0 #fff;
+}
+
+@media (max-width: 800px) {
+  .pd-game-overlay #playfield { flex-direction: column; }
+  .pd-game-overlay #sidebar { width: 100%; flex-direction: row; flex-wrap: wrap; }
+  .pd-game-overlay #sidebar .panel { flex: 1 1 200px; }
+}
